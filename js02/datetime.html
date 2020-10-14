@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二回授業課題</title>
+</head>
+<body>
+    
+<script>
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth()+1;
+    const date = now.getDate();
+    const day = now.getDay();
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const s = now.getSeconds();
+    let d = "";
+    let zone = "";
+    let aisatsu = "";
+
+
+    if(day == 0){
+        d = "日曜日";
+    }
+    if(day == 1){
+        d = "月曜日";
+    }
+    if(day == 2){
+        d = "火曜日";
+    }
+    if(day == 3){
+        d = "水曜日";
+    }
+    if(day == 4){
+        d = "木曜日";
+    }
+    if(day == 5){
+        d = "金曜日";
+    }
+    if(day == 6){
+        d = "土曜日";
+    }
+
+    if(h >= 0 && h < 5){
+        zone = "深夜";
+        aisatsu = ""
+    }else if(h < 7){
+        zone = "早朝";
+        aisatsu = "おはようございます"
+    }else if(h < 11){
+        zone = "朝";
+        aisatsu = "おはようございます"
+    }else if(h < 16){
+        zone = "お昼";
+        aisatsu = "こんにちは"
+    }else if(h < 18){
+        zone = "夕方";
+        aisatsu = ""
+    }else if(h < 23){
+        zone = "夜";
+        aisatsu = "こんばんは"
+    }else{
+        zone = "深夜";
+        aisatsu = "おやすみなさい"
+    }
+
+    alert("現在時刻は" + year + "年" + month + "月" + date + "日" + d + h + "時" + m + "分" + s + "秒" + "\n" + "いまは" + zone + "です。" + aisatsu);
+</script>
+    
+</body>
+</html>
