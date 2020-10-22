@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" href="css/sample.css">
+<title>おみくじ</title>
+</head>
+<body>
+
+<header>
+    <h1>おみくじで運試し♪</h1>
+</header>
+
+<main>
+    <ul>
+        <li id="pull">おみくじを引く</li>
+    </ul>
+    
+    <p id="echo"></p>
+
+    <div id="block1">
+        <p id="kin"></p>
+        <p id="kin_k"></p>
+    </div>
+
+    <div id="block2">
+        <p id="renai"></p>
+        <p id="renai_k"></p>
+
+    </div>
+
+    <p id="luckycolor"></p>
+    <p id="luckycolor_k"></p>
+ 
+</main>
+
+<footer></footer>
+
+<script>
+
+
+//Clickイベントのブロック
+const pull = document.querySelector("#pull");
+const echo = document.querySelector("#echo");
+
+const kin = document.querySelector("#kin");
+const kin_k = document.querySelector("#kin_k");
+const renai = document.querySelector("#renai");
+const renai_k = document.querySelector("#renai_k");
+const luckycolor = document.querySelector("#luckycolor");
+const luckycolor_k = document.querySelector("#luckycolor_k");
+const block1 = document.querySelector("#block1");
+const block2 = document.querySelector("#block2");
+
+pull.onclick = function(){
+    
+    //まず乱数を作る
+    const num = Math.ceil(Math.random() * 5); 
+
+    const r = Math.ceil(Math.random() * 255); 
+    const g = Math.ceil(Math.random() * 255); 
+    const b = Math.ceil(Math.random() * 255); 
+    
+    const u = Math.ceil(Math.random()*2);
+
+    block1.style.width = "15%";
+    block1.style.marginLeft = "auto";
+    block1.style.marginRight = "auto";
+    block1.style.marginBottom = "20px";
+    block1.style.border = "8px dotted #ff3075";
+
+    block2.style.width = "15%";
+    block2.style.marginLeft = "auto";
+    block2.style.marginRight = "auto";
+    block2.style.marginBottom = "20px";
+    block2.style.border = "8px dotted #ff3075";
+   
+    kin.innerHTML = "金運";
+    renai.innerHTML = "恋愛運"
+    luckycolor.innerHTML = "ラッキーカラー"
+    
+    //乱数をIF分岐処理で分ける
+    //条件に合っていればpの位置に表示 
+    if(num == 1){
+        echo.innerHTML = '<img src="img/daikichi.png">';
+        renai_k.innerHTML = "最高！！";
+    }
+    if(num == 2){
+        echo.innerHTML = '<img src="img/kichi.png">';
+        if(u == 1){
+            kin_k.innerHTML = "すごく良い！";
+            renai_k.innerHTML = "なかなか";
+        }
+        if(u == 2){
+            kin_k.innerHTML = "かなり良い！";
+            renai_k.innerHTML = "結構いい！";
+        }
+    }
+    if(num == 3){
+        echo.innerHTML = '<img src="img/tyukichi.png">';
+        if(u == 1){
+            kin_k.innerHTML = "良い！";
+            renai_k.innerHTML = "普通";
+        }
+        if(u == 2){
+            kin_k.innerHTML = "普通";
+            renai_k.innerHTML = "大丈夫♪";
+        }
+    }
+    if(num == 4){
+        echo.innerHTML = '<img src="img/syoukichi.png">';
+        if(unsei == 1){
+            kin_k.innerHTML = "悪くない。";
+            renai_k.innerHTML = "頑張り次第！";
+        }
+        if(unsei == 2){
+            kin_k.innerHTML = "あんまり...";
+            renai_k.innerHTML = "無理は禁物";
+        }
+    }
+    if(num == 5){
+        echo.innerHTML =  '<img src="img/kyou.png">';
+        kin_k.innerHTML = "なんとかなる";
+        renai_k.innerHTML = "明けない夜はない";
+    }
+
+    luckycolor_k.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
+
+}
+
+
+
+
+
+</script>
+</body>
+</html>

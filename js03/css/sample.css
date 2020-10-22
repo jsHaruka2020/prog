@@ -1,0 +1,99 @@
+body{
+    margin:0;
+    padding:0;
+    text-align:left;
+    font-size: 32px;
+    font-family: "游ゴシック","ヒラギノ";
+}
+header{
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+main{
+    border-bottom:1px solid #ccc;
+}
+footer{
+    background-color: #fff;
+    border-bottom:1px solid #ccc;
+    text-align: center;
+}
+p{
+    font-size:70%;
+    text-align: center;
+    border-bottom:1px solid #fff;
+    height: 100%;
+    margin: 10px;
+}
+ul{
+    padding: 0;
+    border: none;
+    display:table;  /* 定義 */
+    table-layout: fixed;
+    width:500px;
+    margin: auto;
+}
+li{
+    text-align: center;
+    list-style-type:none;
+    border: 1px solid #666;
+    background-color: #FFF;
+    display:table-cell;  /* 定義 */
+    cursor: pointer;
+}
+
+#pull{
+    border-radius: 100px 100px 100px 100px;
+}
+
+#echo p{
+    padding: 0;
+}
+
+img #echo {
+    width: 100px;
+    height: auto;
+}
+
+#kin {
+    margin-bottom: 0%;
+    padding: 0%;
+    font-size: 1.5rem;
+}
+
+#kin_k {
+    font-weight: bold;
+    margin-top: 0%;
+    padding: 0%;
+}
+
+#renai {
+    margin-bottom: 0%;
+    padding: 0%;
+    font-size: 1.5rem;
+}
+
+#renai_k {
+    font-weight: bold;
+    margin-top: 0%;
+    padding: 0%;
+}
+
+#luckycolor{
+    margin: 0%;
+    font-size: 1.5rem;
+}
+
+#luckycolor_k{
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;;
+}
+
+li:hover{
+    background:#ff3075;
+    color:#fff;
+}
