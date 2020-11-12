@@ -1,0 +1,218 @@
+
+
+body{ 
+    width: 1000px;
+    background: radial-gradient(#76f3fc, #4845dd);
+    padding: 0px;
+    margin: 0px auto;
+    font-size: 32px;
+    font-family: "游ゴシック","ヒラギノ";
+}
+
+header{
+    text-align: center;
+}
+
+h1{
+    font-size: 100%;
+}
+
+main{
+    display: block;
+}
+
+footer{
+    text-align: center;
+}
+
+ul{
+    padding: 0;
+    display:table;  /* 定義 */
+    table-layout: fixed;
+    width:96%;
+    font-size: 80%;
+    margin: 0 3%;
+    text-align: center;
+    list-style: none;
+}
+
+textarea{
+    margin: 10px 3%;
+    width: 95%;
+    height: 100px;
+    font-size:80%;
+    box-shadow: 3px 3px 3px 3px #555;
+    background-color:rgb(241, 239, 239);
+}
+
+#key{
+    margin:0 3%;
+    width: 95%;
+    font-size:80%;
+    background-color: #e1efff;
+    box-shadow: 3px 3px 3px 3px #555;
+}
+
+button{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 30px;
+}
+
+#blackbutton{
+    outline: none;
+    width: 50px;
+    height: 50px;
+    border-left: 4px solid #d1d1d1;
+    border-top: 4px solid #d1d1d1;
+    border-right: 4px solid #000000;
+    border-bottom: 4px solid #000000;
+    background-color: #000000;
+}
+#blackbutton:active{
+    border-left: 4px solid #000000;
+    border-top: 4px solid #000000;
+    border-right: 4px solid #d1d1d1;
+    border-bottom: 4px solid #d1d1d1;
+}
+
+#pinkbutton{
+    outline: none;
+    width: 50px;
+    height: 50px;
+    border-left: 4px solid #fda9da;
+    border-top: 4px solid #fda9da;
+    border-right: 4px solid #9e045e;
+    border-bottom: 4px solid #9e045e;
+    background-color: #dd0884;
+}
+#pinkbutton:active{
+    border-left: 4px solid #9e045e;
+    border-top: 4px solid #9e045e;
+    border-right: 4px solid #fda9da;
+    border-bottom: 4px solid #fda9da;
+}
+
+#redbutton{
+    outline: none;
+    width: 50px;
+    height: 50px;
+    border-left: 4px solid #ffaeae;
+    border-top: 4px solid #ffaeae;
+    border-right: 4px solid #800303;
+    border-bottom: 4px solid #800303;
+    background-color: #ff0000;
+}
+#redbutton:active{
+    border-left: 4px solid #800303;
+    border-top: 4px solid #800303;
+    border-right: 4px solid #ffaeae;
+    border-bottom: 4px solid #ffaeae;
+}
+
+#bluebutton{
+    outline: none;
+    width: 50px;
+    height: 50px;
+    border-left: 4px solid #a3a1f3;
+    border-top: 4px solid #a3a1f3;
+    border-right: 4px solid #222174;
+    border-bottom: 4px solid #222174;
+    background-color: #4d4beb;
+}
+#bluebutton:active{
+    border-left: 4px solid #222174;
+    border-top: 4px solid #222174;
+    border-right: 4px solid #a3a1f3;
+    border-bottom: 4px solid #a3a1f3;
+}
+
+#greenbutton{
+    outline: none;
+    width: 50px;
+    height: 50px;
+    border-left: 4px solid #b3e7cf;
+    border-top: 4px solid #b3e7cf;
+    border-right: 4px solid #095c2e;
+    border-bottom: 4px solid #095c2e;
+    background-color: #07c7a7;
+}
+#greenbutton:active{
+    border-left: 4px solid #095c2e;
+    border-top: 4px solid #095c2e;
+    border-right: 4px solid #b3e7cf;
+    border-bottom: 4px solid #b3e7cf;
+}
+
+#clear{
+    margin-top: 30px;
+    outline: none;
+    width: 150px;
+    height: 50px;
+    border-left: 4px solid #dfdfdf;
+    border-top: 4px solid #dfdfdf;
+    border-right: 4px solid #3d3d3d;
+    border-bottom: 4px solid #3d3d3d;
+    background-color: #757575;
+}
+#clear:active{
+    border-left: 4px solid #3d3d3d;
+    border-top: 4px solid #3d3d3d;
+    border-right: 4px solid #dfdfdf;
+    border-bottom: 4px solid #dfdfdf;
+}
+
+#leftlist{
+    margin-top: 50px;
+    float: left;
+    width: 300px;
+}
+
+#rightlist{
+    margin-top: 50px;
+    margin-left: 310px;
+}
+
+
+div#leftlist p, div#rightlist p{
+    position: relative;
+    margin-top: 0px;
+    margin-bottom: 50px;
+    text-align: left;
+    height: 100px;
+}
+
+div#leftlist img{
+    padding: 15px 0px 0px; /*上、左右、下の順 */
+}
+
+div#leftlist span{
+    position: absolute;
+    top: 40px;
+    left: 80px;
+    max-width: 500px;
+    word-wrap: break-word;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    background-color: none;
+    color: black;
+    cursor: default;
+}
+
+div#rightlist img{
+    padding: auto;
+}
+
+div#rightlist span{
+    position: absolute;
+    top: 20px;
+    left: 60px;
+    height: 130px;
+    width: 600px;
+    word-wrap: break-word;
+    font-size: 15px;
+    border: none;
+    background-color: none;
+    color: black;
+    cursor: default;
+}

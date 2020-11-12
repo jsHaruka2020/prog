@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>localStrageapp</title>
+<script src="js/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" href="base.css">
+</head>
+
+<body>
+
+<header>
+    <h1>おさかなメモ</h1>
+</header>
+    
+<main>
+    
+    <input type="text" maxlength="10" placeholder="タイトルを入力"  id ="key">
+    <textarea maxlength="120" placeholder="メモを入力" id="memo"></textarea>
+    <ul>
+        <li>
+        <div id="buttons">
+            <button type="button" id="pinkbutton">S</button>
+            <button type="button" id="redbutton">A</button>
+            <button type="button" id="bluebutton">V</button>
+            <button type="button"  id="greenbutton">E</button>    
+        </div>
+        <button type="button" id="clear">Clear</button>
+        </li>
+    </ul>
+
+    <div id="leftlist">
+        
+        <!-- ここのデータが書き換えられる -->
+    </div>
+    
+    <div id="rightlist">
+        
+        <!-- ここのデータが書き換えられる -->
+    </div>
+
+</main>
+    
+<footer></footer>
+    
+<script>
+
+    let mkfishcolor = 0; //魚の色を決める変数を用意
+
+    //1.Save クリックイベント
+    $("#pinkbutton").on("click", function(){
+        mkfishcolor = 1;
+    });
+    $("#redbutton").on("click", function(){
+        mkfishcolor = 2;
+    });
+    $("#bluebutton").on("click", function(){
+        mkfishcolor = 3;
+    });
+    $("#greenbutton").on("click", function(){
+        mkfishcolor = 4;
+    });
+
+    $("#pinkbutton, #redbutton, #bluebutton, #greenbutton").on("click", function(){
+        const key = $("#key").val();
+        const value = $("#memo").val();
+        if(key.length == 0 || value.length == 0){ //何も入力されていない場合
+            alert("タイトルとメモを入力してください。");
+        }else{
+            const leftlist ='<p><img src="images/fish' + mkfishcolor + '.png"><span>'+ key + '</span></p>';
+            const rightlist ='<p><img src="images/fukidashi.png"><span>'+ value + '</span></p>'; 
+            $("#leftlist").append(leftlist);
+            $("#rightlist").append(rightlist); 
+
+            //メモの順序と色を保存するために、メモの部分のhtmlを一括で登録してみる
+            const lefthtml = $("#leftlist").html(); //#leftlist内のhtmlを取得してlefthtmlに入れる
+            const righthtml = $("#rightlist").html(); 
+            localStorage.setItem("leftkey", lefthtml); //localStrageに#leftlist内のhtmlをすべて保存
+            localStorage.setItem("rightkey", righthtml); 
+        }
+    });
+    
+    //2.clear クリックイベント
+    $("#clear").on("click", function(){
+        localStorage.clear();
+        $("#leftlist").empty();
+        $("#rightlist").empty();
+    });
+    
+    //3.ページ読み込み：保存データ取得表示
+    let lefthtml = localStorage.getItem("leftkey"); //localStrageに保存しておいた#leftlist内のhtmlを取得
+    let righthtml = localStorage.getItem("rightkey"); 
+    if(localStorage.length == 0){ //最初に説明を表示
+        lefthtml = '<p><img src="images/fish1.png"><span>タイトルは10文字まで</span></p>';
+        righthtml = '<p><img src="images/fukidashi.png"><span>こんにちは。メモは120文字まで書けます。<br>タイトルとメモを入力したら、好きな色のSAVEボタンを押して保存してください。<br>Clearを押すとすべてのメモが削除されます。</span></p>';
+    }
+    $("#leftlist").html(lefthtml); //htmlを丸ごと書き換える
+    $("#rightlist").html(righthtml); 
+
+
+    
+    // for(let i = 0; i < localStorage.length; i++){
+    //     const key = localStorage.key(i); //KEY名を取得
+    //     const value = localStorage.getItem(key); //上で取得したkEY名の値を取得 
+    //     const html1 ='<li>'+ key + '</li>';
+    //     const html2 ='<li>'+ value + '</li>'; 
+    //     $("#leftlist").append(html1);
+    //     $("#rightlist").append(html2);
+    // }
+
+</script>
+</body>
+</html>
