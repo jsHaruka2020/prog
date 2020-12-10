@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="base.css">
+<title>クイズ練習（複数）</title>
+</head>
+<body>
+
+<header>
+    <h1>クイズを作ろう</h1>
+</header>
+
+<main>
+    <p>最初に問題を追加するときはlocalStrageをクリアしてから入力しないとエラーになります。<br>また、空欄があってもエラーになります。<br>決定ボタンを押すとlocalStrageに保存されます。</p>
+    <!-- 問題登録画面 -->
+    <p id="des">問題を入力</p>
+    <textarea id="edpro" rows="3" cols="50"></textarea>
+
+    <p id="des">選択肢1</p>
+    <textarea id="edcho1" rows="1" cols="10"></textarea>
+
+    <p id="des">選択肢2</p>
+    <textarea id="edcho2" rows="1" cols="10"></textarea>
+
+    <p id="des">選択肢3</p>
+    <textarea id="edcho3" rows="1" cols="10"></textarea>
+
+    <p id="des">答えの番号</p>
+    <textarea id="edans" rows="1" cols="1"></textarea>
+
+    <button id="det">決定</button>
+
+    <button id="bkquiz"><a href="quiz.html">クイズに戻る</a></button>
+
+</main>
+
+<footer></footer>
+
+<script>
+
+
+let num = localStorage.length / 5 + 1;
+
+$("#det").on("click", function(){
+    if($("#edans").val() != 1 && $("#edans").val() != 2 && $("#edans").val() != 3){
+        alert("「答えの番号」には1か2か3を入力してください");
+        $("#edans").val(""); //テキストボックスの文字を消す
+    }
+    const edpro = $("#edpro").val();
+    const edcho1 = $("#edcho1").val();
+    const edcho2 = $("#edcho2").val();
+    const edcho3 = $("#edcho3").val();
+    const edans = $("#edans").val();
+
+
+
+    localStorage.setItem("pro_" + num, edpro);
+    localStorage.setItem("cho1_" + num, edcho1);
+    localStorage.setItem("cho2_" + num, edcho2);
+    localStorage.setItem("cho3_" + num, edcho3);
+    localStorage.setItem("ans_" + num, edans);
+    num++;
+});
+
+
+
+</script>
+</body>
+</html>

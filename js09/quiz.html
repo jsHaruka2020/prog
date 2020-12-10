@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="base.css">
+<title>クイズ練習（複数）</title>
+</head>
+<body>
+
+<header>
+    <h1>クイズ練習（複数）</h1>
+</header>
+
+<main>
+  <div id="quizpg">
+  <h2 id="kai"></h2>
+  <button type="button" id="edit"><a href="editquiz.html">問題を登録する</a></button>
+  <p id="quest">ここに問題が出題されます</p>
+  <p id="choices">
+    <input type="radio" name="toi" value="1"><span id="toi1">選択肢１</span>
+    <input type="radio" name="toi" value="2"><span id="toi2">選択肢２</span>
+    <input type="radio" name="toi" value="3"><span id="toi3">選択肢３</span>
+  </p>
+</div>
+</main>
+
+<footer></footer>
+<script>
+//ここから記述領域［START］
+
+  //以下に配列を記述してください。
+  //問題文[配列]
+  const qs = [
+    "通るときには閉まって、通らないときには開いているものは何？",
+    "話すことがとても好きな道具は何？",
+    "世界の真ん中にいる虫は何？",
+    "車で走っているときに、カーブで必ず落としてしまうものは？",
+    "お酒は20才、タバコも20才、車に乗れるのは何才から？",
+    "ひっくり返ると、軽くなる動物どうぶつなーんだ？"
+  ];
+
+    
+  //回答選択肢[多重配列]
+  const toi = [
+    ["踏み切り","洗濯機","冷蔵庫"],
+    ["スプーン","シャベル","しゃもじ"],
+    ["てんとう虫","カマキリ","蚊"],
+    ["荷物","スピード","タイヤ"],
+    ["0才","18才","20才"],
+    ["クジラ", "シャチ","イルカ"]
+  ];
+    
+  //答え[配列]
+  const ans = [1, 2, 3, 2, 1, 3];
+
+
+  //localStrageの文字列を対応する配列に追加
+  for(let add = 1; add <= (localStorage.length / 5); add++){
+    let adqs =  localStorage.getItem("pro_" + add);
+    let adtoi = [localStorage.getItem("cho1_" + add), localStorage.getItem("cho2_" + add), localStorage.getItem("cho3_" + add)];
+    let adans = localStorage.getItem("ans_" + add);
+
+    qs.push(adqs);
+    toi.push(adtoi);
+    ans.push(adans);
+  }
+ 
+
+  //1.最初の問題文＆回答選択肢＆回答値を設定
+  let i = 0;
+  let correct = 0;
+  let n = i + 1; //何問目かを数える
+  $("h1").text("第" + n + "問");
+
+  $("#quest").text( qs[i] );
+
+  $("#toi1").text( toi[i][0] );
+  $("#toi2").text( toi[i][1] );
+  $("#toi3").text( toi[i][2] );
+
+
+  //2.ラジオボタンをクリックしたらイベント発生！(クリックイベント)
+  //or条件は $("セレクタ,セレクタ")
+  $("[name=toi]").on("click", function(){
+    //変数に値を代入
+    const v = $(this).val();
+    //if文でradioボタンの値と入力された答えを比較
+    if(v == ans[i]){
+      $("h2").hide().fadeIn().text("第" + n + "問は…正解！");
+      correct++;
+      }else{
+        $("h2").hide().fadeIn().text("第" + n + "問は…不正解");
+        }
+    if(i < (qs.length - 1)){
+      i++;
+      n++;
+      $("h1").text("第" + n + "問")
+      $("#quest").text( qs[i] );
+      $("#toi1").text( toi[i][0] );
+      $("#toi2").text( toi[i][1] );
+      $("#toi3").text( toi[i][2] );
+    }else if(i == (qs.length - 1)){
+      $("h1").text("お疲れ様でした");
+      $("#quest").hide();
+      $("[name=toi]").hide();
+      $("#toi1").hide();
+      $("#toi2").hide();
+      $("#toi3").hide();
+        $("#quizpg").append('<p>全問終了です</p>')
+        $("#quizpg").append('<button id="finbt">OK</button>')
+        //↓外に出すと動かない
+        $("#finbt").on("click", function(){
+          $("p").remove();
+          $("main").html('<p id="result">' + n + '問中' + correct + '問正解！</p>');
+          if(n == correct){
+            $("main").append('<p>全問正解おめでとう！</p>');
+          }
+          $("main").append('<p><button><a id="rest" href="quiz.html">再挑戦</a></button></p>');
+        });
+      }
+  });
+
+//ここまでが記述領域［END］
+</script>
+</body>
+</html>
