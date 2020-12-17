@@ -1,0 +1,17 @@
+body {
+    width: 100%;
+    height: 1000px;
+}
+
+nav {
+    padding-bottom: 20px;
+}
+
+canvas {
+    margin-left: 20px;
+}
+
+li {
+    width: 20px;
+    height: 20px;
+}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>test_canvas.html</title>
+    <link rel="stylesheet" href="base.css">
+</head>
+
+<body>
+    <section>
+        <h1>Canvas</h1>
+        <nav>
+            
+            <!-- 線の色を変更するHTML要素 -->
+            <p>カラー：<input type="color" id="color"></p>
+            <!-- <ul>
+                <li id="rec1"></li>
+                <li id="rec2"></li>
+                <li id="rec3"></li>
+                <li id="rec4"></li>
+                <li id="rec5"></li>
+                <li id="rec6"></li>
+                <li id="rec7"></li>
+                <li id="rec8"></li>
+                <li id="rec9"></li>
+                <li id="rec10"></li>
+            </ul> -->
+            <!-- 線の太さを変更するHTML要素 -->
+            <p>線の太さ：<input type="range" id="range" min="1" max="50" value="5"></p>
+            <p>Sample<canvas id="boldsample" width="100" height="100" style="border:1px solid blue;"></canvas></p>
+            <button id="clear_btn">クリアー</button>
+        </nav>
+        <canvas id="drowarea" width="500" height="500" style="border:1px solid blue;"></canvas>
+    </section>
+
+
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script>
+        //初期化(変数letで宣言)
+        let canvas_mouse_event = false; //スイッチ [ true=線を引く, false=線は引かない ]  ＊＊＊
+        let oldX = 0; //１つ前の座標を代入するための変数
+        let oldY = 0; //１つ前の座標を代入するための変数
+        let bold_line = 3; //ラインの太さをここで指定 後で変えられるように変数にしてある（スライダーの値を代入）
+        let color = "#ccc"; //ラインの色をここで指定 (カラーピッカーの値代入) 
+        
+        // let i = 0; //色を変更した回数（10回まで）
+
+     
+        //グローバル変数や、フラグやスイッチと呼ばれる変数の使い方が重要
+
+
+        //------------------------------------------------
+        const can = $("#drowarea")[0]; //CanvasElement
+        const ctx = can.getContext("2d"); //描画するための準備！
+
+        const minican = $("#boldsample")[0];
+        const minictx = minican.getContext("2d");
+        //------------------------------------------------
+
+
+        //最初の色と太さの見本表示
+        minictx.clearRect(0, 0, minican.width, minican.height);
+        minictx.beginPath();
+        minictx.fillStyle = color;
+        minictx.arc(50, 50, 2.5, Math.PI*2, false);
+        minictx.fill();       
+
+        //色、サイズ取得
+        $("#color").on("change", function(){
+            color = $(this).val();
+            // i++;
+            // // if(i <= 10){
+            // //     $("#rec"+ i).css("backgroundColor", color);
+            // // }else {
+            // //     i = 0;
+            // // }
+        });
+
+        $("#range").on("change", function(){
+            bold_line = $(this).val();
+        });
+
+        //or条件 見本を変更する
+        $("#color, #range").on("change", function(){
+            minictx.clearRect(0, 0, minican.width, minican.height);
+            minictx.beginPath();
+            minictx.fillStyle = color;
+            minictx.arc(50, 50, bold_line/2, Math.PI*2, false);
+            minictx.fill();
+        });
+
+
+        //セレクタにbodyを指定、canvasの絶対座標を求める。カーソルがcanvas内にないときは描画されない
+        $("body").on("mousemove", function(e){
+            let clientR = can.getBoundingClientRect();
+            let px = clientR.left
+            let py = clientR.top;
+            if(e.clientX < px || e.clientX > can.width + px || e.clientY < py || e.clientY > can.height + py){
+                canvas_mouse_event = false;
+            }
+        });
+
+
+        //mousedown：フラグをTrue
+        //-----------------------------------------------
+        //oldX = e.offsetX;       //MOUSEDOWNしたX横座標取得
+        //oldY = e.offsetY; //MOUSEDOWN Y高さ座標取得
+        //canvas_mouse_event=true;
+        //-----------------------------------------------
+        //上5つのスクリプトを記述します。
+
+        $(can).on("mousedown", function(e){
+            oldX = e.offsetX;       //MOUSEDOWNしたX横座標取得
+            oldY = e.offsetY; //MOUSEDOWN Y高さ座標取得
+            canvas_mouse_event = true; 
+        });
+
+
+        //mousemove：フラグがTrueだったら描く ※e：イベント引数取得
+        //----------------------------------------------
+        $(can).on("mousemove", function(e){
+            if(canvas_mouse_event == true){ //ここをfalseにするとキャンバス内にカーソルが入った瞬間からずっと線が描かれる
+                const px = e.offsetX;
+                const py = e.offsetY;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = bold_line;
+                ctx.beginPath();
+                ctx.lineJoin = "round";
+                ctx.lineCap = "round";
+                ctx.moveTo(oldX, oldY);
+                ctx.lineTo(px, py);
+                ctx.stroke();
+                oldX = px; //新しい座標を古い座標に入れ替えている
+                oldY = py;
+            }
+        });
+
+
+        //mouseup：フラグをfalse マウスを離したとき
+        //------------------------------------------------
+        //    canvas_mouse_event=false;
+        //------------------------------------------------
+        $("body").on("mouseup", function(e){ //セレクタにbodyを指定、どこでマウスを離してもfalseになる
+            canvas_mouse_event = false;
+        });
+
+
+        //#clear_btn：クリアーボタンAction
+        //-----------------------------------------------------------------
+        //    ctx.beginPath();
+        //    ctx.clearRect(0, 0, can.width, can.height);
+        //-----------------------------------------------------------------
+        $("#clear_btn").on("click", function(){
+           ctx.beginPath();
+           ctx.clearRect(0, 0, can.width, can.height); //指定した視覚の領域を消去
+        });
+    </script>
+</body>
+
+</html>
