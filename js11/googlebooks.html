@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/sample.css">
+  <title>GoogleBookAPI【課題】</title>
+</head>
+
+<body>
+
+  <header>
+    <h1>GoogleBookAPI【課題】</h1>
+    <input type="text" maxlength="10" placeholder="キーワードをを入力"  id="q">
+    <button id="search">検索</button>
+  </header>
+
+  <main>
+    <div id="zokusei">
+      <ul>
+        <li>題名</li><li>出版社</li><li>詳細リンク</li>
+      </ul>
+    </div>
+    <div id="content">
+    </div>
+  </main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+let url = "https://www.googleapis.com/books/v1/volumes?q=";
+let q = ""; //キーワードを入れる変数
+
+let nurl = "";
+console.log(nurl);
+
+$("#search").on("click", function(){
+  q = $("#q").val();
+  nurl = url + q; //q=の後に続く文字列がキーワードになってデータを検索してくれる
+  console.log(q);
+  console.log(nurl);
+
+  //jSONからオブジェクトに変換してくれる
+  $.getJSON(nurl, function (data){
+    console.log(data);
+    let view = ""; //html
+    //for文で全てのデータを取得、文字列を作成
+    for (let i = 0; i < data.items.length; i++){
+      const item = data.items[i];
+      view += '<ul>';
+      view += '<li>' + item.volumeInfo.title +  '</li><li>' + item.volumeInfo.publisher + '</li><li><a  href="' + item.volumeInfo.infoLink + '>' + item.volumeInfo.infoLink + '</a></li>';
+      view += '</ul>';
+    }
+    //id="content"に文字列を表示
+    $("#content").html(view);
+  });
+});
+
+
+
+//infolink aタグ
+//出版社
+//キーワードを入力できるように
+
+
+</script>
+</body>
+
+</html>
