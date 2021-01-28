@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デジタル絵日記</title>
+    <link rel="stylesheet" href="base.css">
+
+    <script>
+        //Adobeのwebフォント
+        (function(d) {
+          var config = {
+            kitId: 'zau3ixc',
+            scriptTimeout: 3000,
+            async: true
+          },
+          h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+        })(document);
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <!-- <h1>デジタル絵日記</h1> -->
+        <p><img src="data/logo.png" width="320" height="64" alt="デジタル絵日記"></p>
+        <p>今日の出来事をデジタル絵日記にかいてみよう。絵をクリックすると日記が読めます。</p>
+        <p><a href="edit_enikki.html" id="today">今日の日記をかく</a></p>
+    </header>
+
+    <main>
+        <h2></h2>
+        <table> 
+            <tr >
+                <td id="cal_title" colspan="7"></td>
+            </tr>
+            <tr>
+                <td class="days">日曜日</td>
+                <td class="days">月曜日</td>
+                <td class="days">火曜日</td>
+                <td class="days">水曜日</td>
+                <td class="days">木曜日</td>
+                <td class="days">金曜日</td>
+                <td class="days">土曜日</td>
+            </tr>
+            <div id="calendar"></div>
+
+        </table>
+
+        <div id="popup_outer">
+            <div id="popup_inner">
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        //ポップアップ表示の日記を非表示にする
+        $("#popup_inner").hide();
+        $("#popup_outer").hide();
+
+        //今の日付・時間取得
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const date = now.getDate();
+        const day = now.getDay();
+        const s_month = ("0" + month).slice(-2); //表示用に二桁
+
+        //カレンダーで選択した日付を取得
+        let selectyear = localStorage.getItem("selectyear");
+        let selectmonth =localStorage.getItem("selectmonth");
+        let selectdate =localStorage.getItem("selectdate");
+        let ss_month = ("0" + selectmonth).slice(-2);
+        let ss_date = ("0" + selectdate).slice(-2);
+
+        //今現在のページの年・月（ボタンで移動）2桁ではない
+        let pageyear = year;
+        let pagemonth = month;
+        
+        //編集画面からすぐその月のページに戻れるようにする
+        if(selectyear > 0){
+            pageyear = selectyear;
+        }
+        if(selectmonth > 0){
+            pagemonth = selectmonth;
+        }
+        
+        let s_pagemonth = ("0" + pagemonth).slice(-2); //二桁表示にする
+
+        //現在のページの日付を表示
+        $("#cal_title").append('<p id="new_caltitle">' + pageyear + '年' + s_pagemonth + '月</p>');
+
+        //矢印ボタン
+        $("#cal_title").prepend('<img src="data/left.png" id="l_arrow">');
+        $("#cal_title").append('<img src="data/right.png" id="r_arrow">');
+
+        //table作成 6行7列
+        for(let i = 1; i <= 6; i++){
+            $("table").append('<tr id="' + i + 'syu"></tr>');
+            for(let j = 1; j <= 7; j++){
+                let masu = (i - 1) * 7 + j;
+                $("#"+ i + "syu").append('<td id="' + masu + 'masu"></td>');
+            }
+        } 
+
+        //最初はその月のカレンダーを表示
+        makecalendar();
+
+        //右矢印クリックで来月へ
+        $("#r_arrow").on("click", function(){
+            if(pagemonth < 12){
+                pagemonth ++;
+            }else{
+                pageyear ++;
+                pagemonth = 1;
+            }
+            //現在のページの日付を表示
+            s_pagemonth = ("0" + pagemonth).slice(-2);
+            $("#new_caltitle").text(pageyear + '年' + s_pagemonth + '月');
+
+            makecalendar();
+        });
+
+        //左矢印クリックで前月へ
+        $("#l_arrow").on("click", function(){
+            if(pagemonth > 1){
+                pagemonth --;
+            }else{
+                pageyear --;
+                pagemonth = 12;
+            }
+            s_pagemonth = ("0" + pagemonth).slice(-2);
+            //現在のページの日付を表示
+            $("#new_caltitle").text(pageyear + '年' + s_pagemonth + '月');
+
+            makecalendar();
+        });
+
+        function makecalendar(){
+            //初期化 全てのマスを空にする
+            for(let i = 0; i < 42; i++){
+                $("#" + i + "masu").empty();
+            }
+
+            //pagemonthの月が何曜日始まりか調べる
+            const firstnewdate = new Date(pageyear, pagemonth - 1, 1);
+            let firstday = firstnewdate.getDay(); //月始まりの曜日
+
+            //pagemonthの月は何日あるか調べる
+            let countnewdate = new Date(pageyear, pagemonth, 0) //翌月の0日=その月の末日という仕組みらしい
+            let numofdate = countnewdate.getDate();
+
+            for(let i = 1; i < numofdate + 1; i++){
+                //2桁表示の日にち
+                let s_date = ("0" + i).slice(-2);
+                //edit_enikki.htmlでlocalstrageに保存した画像のurlを取得する
+                const imgdata = localStorage.getItem("" + pageyear + s_pagemonth + s_date + "illust");
+
+                //日付を表示
+                console.log(date);
+                console.log(i);
+                console.log("#"+ (firstday + i) + "masu");
+                $("#"+ (firstday + i) + "masu").append('<p id="cal_date">' + i  + '</p>');
+
+                //今日の日付の場所に「今日」と表示
+                if(pageyear == year && pagemonth == month && i == date){
+                    $("#" + (firstday + i) + "masu").append('</p><p id="kyou">今日<p>');
+                }
+
+                //画像を表示
+                if(imgdata <= 0){
+                    $("#" + (firstday + i) + "masu").append('<p><a href="edit_enikki.html">かく</a></p>');
+                }else{
+                    $("#" + (firstday + i) + "masu").append('<img src="' + imgdata + '" id="'+ pageyear + s_pagemonth + s_date + '">' );
+                }
+
+                //クリックされた日付を取得、localstrageに保存 //ページをまたぐのでデータが消えないようにlocalstrageに保存する必要がある
+                $("#" + (firstday + i) + "masu").on("click", function(){
+                    localStorage.setItem("selectyear", pageyear);
+                    localStorage.setItem("selectmonth", pagemonth);
+                    localStorage.setItem("selectdate", i);
+                    console.log("" + pageyear + pagemonth + i);
+                });
+
+                //「今日の絵日記をかく」をクリックしたとき、その日の日付を取得、localstrageに保存
+                $("#today").on("click", function(){
+                    localStorage.setItem("selectyear", year);
+                    localStorage.setItem("selectmonth", month);
+                    localStorage.setItem("selectdate", date);
+                });
+
+                //画像をクリックしたときの絵日記のポップアップ表示
+                $("#" + pageyear + s_pagemonth + s_date).on("click", function(){
+                    const popupimg = localStorage.getItem(pageyear + s_pagemonth + s_date + "illust");
+                    const popuptext = localStorage.getItem(pageyear + s_pagemonth + s_date + "text");
+                    $("#popup_inner").empty();
+                    $("#popup_inner").append('<p><img src="data/enikki_bg.png" id="popup_bg"></p>');
+                    $("#popup_inner").append('<p><img src="' + popupimg + '" id="popupimg"></p>');
+                    $("#popup_inner").append('<div id="nikki_outer"><p id="nikki"><span class="tatetyuyoko">' + pagemonth + '</span>月<span class="tatetyuyoko">' + i + '</span>日<br>' + popuptext + '</p></div>');
+                    $("#popup_inner").append('<p><a href="edit_enikki.html" id="renew">かきなおす</a></p>')
+                    $("#popup_inner, #popup_outer").fadeIn(250);
+
+                    //かきなおすをクリックしたときにlocalstrageのデータを削除
+                    $("#popup_inner").on("click", "#renew", function(){
+                        localStorage.removeItem(pageyear + s_pagemonth + s_date + "illust");
+                        localStorage.removeItem(pageyear + s_pagemonth + s_date + "text");
+                    });
+                });
+            }
+        }
+        
+        //ポップアップの外側をクリックしたときにポップアップを消す
+        $("#popup_outer").on("click", function(){
+            $("#popup_inner, #popup_outer").hide();
+            console.log("ポップアップの外側がクリックされました");
+        });
+
+    </script>
+    
+</body>
+</html>

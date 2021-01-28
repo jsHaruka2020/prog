@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デジタル絵日記</title>
+    <link rel="stylesheet" href="base.css">
+</head>
+
+<body>
+
+    <header>
+        <!-- <h1>デジタル絵日記</h1> -->
+        <p><img src="data/logo.png" width="320" height="64" alt="デジタル絵日記"></p>
+        <p>自由にかこう！</p>
+        <p id="selectdate"></p>
+    </header>
+
+    <main>
+        <p class="explain">1.絵を描いてください</p>
+        <div id="topcanvas">
+            <div id="samplearea">
+                <p>Sample<canvas id="sample" width="50" height="50"></canvas></p>
+            </div>
+            <p id="rangearea">線の太さ：<input type="range" id="range" min="1" max="50" value="5"></p>
+            <button id="clear_btn">全消去</button>
+        </div>
+            
+        <div id="sidecanvas">
+            <!-- タッチペンでスポイトを使うと動かなくなるため（バグ？）、22色に限定する -->
+            <ul class="color">
+                <li id="c1"></li>
+                <li id="c2"></li>
+                <li id="c3"></li>
+                <li id="c4"></li>
+                <li id="c5"></li>
+                <li id="c6"></li>
+                <li id="c7"></li>
+                <li id="c8"></li>
+                <li id="c9"></li>
+                <li id="c10"></li>
+                <li id="c11"></li>
+                <li id="c12"></li>
+                <li id="c13"></li>
+                <li id="c14"></li>
+                <li id="c15"></li>
+                <li id="c16"></li>
+                <li id="c17"></li>
+                <li id="c18"></li>
+                <li id="c19"></li>
+                <li id="c20"></li>
+                <li id="c21"></li>
+                <li id="c22"></li>
+            </ul>
+        
+            <div id="canvasarea">
+                <canvas id="illust" width="500" height="300"  ></canvas>
+            </div>
+        </div>
+        <!-- <p>カラー：<input type="color" id="color"></p> -->
+        <p class="explain">2.文章を書いてください（95文字まで、4行半くらい）</p>
+        <textarea id="text" maxlength="95"></textarea>
+        <p class="explain">3.どちらもできたら完成ボタンを押して保存してください</p>
+        <div id="compbt_star">
+        <p class="stars"><img src="data/star1‎.png"  width="50" height="50"></p><button type="button" id="comp">完成！</button><p class="stars"><img src="data/star2.png" class="stars" width="50" height="50"></p>
+        </div>
+
+        <p><a href="all_enikki.html">絵日記の一覧に戻る</a></p>
+
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        //日付関係 2桁表示: sliceで最後の1文字前を指定する
+        const now = new Date();
+        const year = now.getFullYear();
+        const month =("0" + now.getMonth() + 1).slice(-2);
+        const date = now.getDate();
+        const day = now.getDay();
+        const selectyear = localStorage.getItem("selectyear"); //カレンダーのページで選択した日付を取得
+        const selectmonth = localStorage.getItem("selectmonth"); //カレンダーのページで選択した日付を取得
+        const selectdate = localStorage.getItem("selectdate"); //カレンダーのページで選択した日付を取得
+
+        //2桁表示
+        const ss_month =("0" + selectmonth).slice(-2);
+        const ss_date =("0" + selectdate).slice(-2);
+
+        //色の配列
+        const precolors = ["#B98744","#7C5642","#6f4b3e","#2b2b2b","#94A639","#3eb370","#00552e","#0095d9","#4c6cb3","#bce2e8","#949495","#ffffff","#f09199","#fce2c4","#ffd900","#f8b500","#ee7800","#eb6101","#e60033","#eb6ea5","#7058a3","#884898"];
+
+
+        $("#selectdate").text(selectyear + "/" + ss_month + "/" + ss_date + "の日記"); //いつの日記を編集しているか表示
+
+        $(".stars").hide(); //完成ボタンを押したときに表示される画像を隠す
+
+        //初期化
+        let canvas_pointer_event = false;
+        let oldX = 0;
+        let oldY = 0;
+        let bold_line = 3;
+        let color = "#B98744";
+
+        //描画準備 
+        const can = $("#illust")[0]; 
+        const ctx = can.getContext("2d"); 
+        const s_can = $("#sample")[0];
+        const s_ctx = s_can.getContext("2d");
+
+        //背景を白く塗りつぶす（JPEGで保存した時に黒くならないように）
+        ctx.fillStyle = "#ffffff";
+        ctx.rect(0,0,500,300);
+        ctx.fill();
+
+        //sampleのキャンバス
+        s_can_change();
+
+        //色と線の太さ
+        //色は22色から選ぶ
+        for(let i = 1; i <= 22; i ++){
+            $("#c" + i).on("click", function(){
+                color = precolors[i-1];
+                s_can_change();
+                for(let j = 1; j <= 22; j++){
+                    $("#c" + j).css("outline", "none"); //全ての枠線を消す
+                }
+                $("#c" + i).css("outline", "2px solid #ff0000"); //クリックされた色に枠線を付ける
+            });
+        }
+        $("#c1").css("outline", "2px solid #ff0000"); //色の初期設定
+
+        $("#range").on("change", function(){
+            bold_line = $(this).val();
+            s_can_change();
+        });
+
+        //サンプルのキャンバスの更新
+        function s_can_change(){
+            s_ctx.fillStyle = "#ffffff";
+            //白を選んだ時だけキャンバスの背景が黒くなる
+            if(color == "#ffffff"){
+                s_ctx.fillStyle ="#2b2b2b";
+            }
+            s_ctx.rect(0,0,50,50);
+            s_ctx.fill();
+            s_ctx.beginPath();
+            s_ctx.fillStyle = color;
+            s_ctx.arc(25, 25, bold_line/2, Math.PI*2, false);
+            s_ctx.fill();
+        }
+
+        //セレクタにbodyを指定、canvasの絶対座標を求める。カーソルがcanvas内にないときは描画されない
+        $("body").on("pointermove", function(e){
+            let clientR = can.getBoundingClientRect();
+            let px = clientR.left;
+            let py = clientR.top;
+            if(e.clientX < px || e.clientX > can.width + px || e.clientY < py || e.clientY > can.height + py){
+                canvas_mouse_event = false;
+            }
+        });
+
+        //pointerdown(タッチ操作にも対応。mousedownだとダメ)
+        $(can).on("pointerdown", function(e){
+            oldX = e.offsetX;
+            oldY = e.offsetY;
+            canvas_pointer_event = true;
+        });
+
+        //pointermove
+        $(can).on("pointermove", function(e){
+            if(canvas_pointer_event == true){ //ここをfalseにするとキャンバス内にカーソルが入った瞬間からずっと線が描かれる
+                const px = e.offsetX;
+                const py = e.offsetY;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = bold_line;
+                ctx.beginPath();
+                ctx.lineJoin = "round";
+                ctx.lineCap = "round";
+                ctx.moveTo(oldX, oldY);
+                ctx.lineTo(px, py);
+                ctx.stroke();
+                oldX = px; //新しい座標を古い座標に入れ替えている
+                oldY = py;
+                //console.log(e);
+            }
+        });
+
+        //pointerup
+        $("body").on("pointerup", function(e){
+            canvas_pointer_event = false;
+        });
+
+        //全消去ーボタン
+        $("#clear_btn").on("click", function(){
+            ctx.beginPath();
+            ctx.clearRect(0, 0, can.width, can.height);
+            //背景を白く塗りつぶす（JPEGで保存した時に黒くならないように）
+            ctx.fillStyle = "#ffffff";
+            ctx.rect(0,0,500,300);
+            ctx.fill();
+        });
+
+        //完成ボタン
+        //toDataURLメソッドでcanvasの画像URLを取得できる
+        //そのURLをlocalstrageに保存
+        $("#comp").on("click", function(){
+            //絵
+            let can_jpg = can.toDataURL();
+            console.log(can_jpg);
+            localStorage.setItem("" + selectyear + ss_month + ss_date + "illust", can_jpg);
+
+            //文章
+            let text = $("#text").val();
+            localStorage.setItem("" + selectyear + ss_month + ss_date + "text", text);
+            console.log(text);
+
+            //画像
+            $(".stars").hide().show().hide(1000);
+        });
+
+        //localstrage内に今日の日記がすでにあった場合
+        const lsdata_img = localStorage.getItem("" + selectyear + ss_month + ss_date + "illust");
+        const lsdata_txt = localStorage.getItem("" + selectyear + ss_month + ss_date + "text");
+        if(lsdata_img.length > 0 || lsdata_txt.length){
+            $("html").empty();
+            $("html").html('<p>今日の日記はすでに作成済みです。</p><p><a href="enikki.html" id="cleardiary">今の日記を消して新しく作る</a></p><p><a href="all_enikki.html">絵日記一覧に戻る</a></p>');
+        }
+
+        $("#cleardiary").on("click", function(){
+            localStorage.removeItem("" + selectyear + ss_month + ss_date + "illust");
+            localStorage.removeItem("" + selectyear + ss_month + ss_date + "text");
+        });
+      
+        
+    </script>
+    
+</body>
+</html>
