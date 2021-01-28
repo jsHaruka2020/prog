@@ -1,0 +1,440 @@
+
+body {
+    width: 100%;
+    height: 1100px;
+    background-color: #ffd1d1e7;
+}
+
+h1 {
+    text-align: center;
+    color: #dd1f94;
+}
+
+p {
+    text-align: center;
+    color: #dd1f94;
+}
+
+header p {
+    color: #3d3d3d;
+}
+
+header a {
+    color: #3d3d3d;
+}
+
+/* -------------------日記のポップアップ表示 ---------------------*/
+
+div#popup_outer {
+    position: fixed; /* スクロールしても位置が固定されたまま */
+    left: 0px;
+    top: 0px;
+    height: 100vh;
+    width: 100vw;
+}
+
+div#popup_inner {
+    width: 700px;
+    height: 900px;
+    position: fixed;
+    top: 50%;
+    left:50%;
+    margin-top: -400px;
+    margin-left: -350px;
+}
+
+img#popup_bg {
+    width: 700px;
+    height: 800px;
+    position: fixed;
+    top: 50%;
+    left:50%;
+    margin-top: -400px;
+    margin-left: -350px;
+}
+
+img#popupimg {
+    width:500px;
+    height: 300px;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    position: relative;
+
+}
+
+div#nikki_outer {
+    width: 500px;
+    height: 375px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tatetyuyoko {
+    text-combine-upright: all;
+}
+
+p#nikki {
+    writing-mode: vertical-rl;
+    font-family: kinuta-shin-stdn,sans-serif;
+    /* font-weight: 450; */
+    font-style: normal;
+    font-size: 28px;
+    height: 90%;
+    color: rgb(36, 36, 36);
+    font-weight: bold;
+    width: 100%;
+    display: inline-block;
+    text-align: justify;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+a#renew {
+    background-color: rgb(251, 204, 255);
+    font-size: 28px;
+    color: rgb(26, 26, 26);
+    text-decoration: none;
+}
+
+a#renew:hover {
+    background-color: rgb(245, 143, 199);
+}
+/* ------------------------------------------------------*/
+
+
+a:hover {
+    color: rgb(255, 0, 149);
+}
+
+nav {
+    padding-bottom: 20px;
+}
+
+/* ------------------------------------------------------*/
+
+#selectdate {
+    font-size: 25px;
+}
+
+.explain {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+/*--------------- キャンバスとその周り ----------------*/
+
+#topcanvas {
+    width: 600px;
+    height: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div#samplearea {
+    width: 60px;
+    margin: 0;
+    margin-right: 12px;
+    display: inline-block;
+}
+
+#samplearea p {
+    display: inline-block;
+    width: 50px;
+    margin: 0;
+    margin-left: 5px;
+}
+
+#sample {
+    margin: 0;
+}
+
+p#rangearea {
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 10px;
+    margin-left: 17px;
+}
+
+#range {
+    display: inline-block;
+}
+
+button#clear_btn {
+    display: inline-block;
+    outline: none;
+    border-left: 4px solid #fdbed7;
+    border-top: 4px solid #fdbed7;
+    border-right: 4px solid #8d1d4c;
+    border-bottom: 4px solid #8d1d4c;
+    background-color: #db4382;
+}
+
+button#clear_btn:active {
+    border-left: 4px solid #8d1d4c;
+    border-top: 4px solid #8d1d4c;
+    border-right: 4px solid #fdbed7;
+    border-bottom: 4px solid #fdbed7;
+}
+
+#sidecanvas {
+    width: 600px;
+    height: 300px;;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 50px; /*marginだと下の文字を選択してしまう */
+}
+
+ul.color {
+    width: 70px;
+    display: inline-block;
+    margin: 0;
+    margin-top: 2px;
+    padding: 0;
+}
+
+ul.color li {
+    width: 22px;
+    height: 22px;
+    float: left;
+    list-style: none;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+li#c1 {
+    background-color: #B98744;
+}
+li#c2 {
+    background-color: #7C5642;
+}
+li#c3 {
+    background-color: #6f4b3e;
+}
+li#c4 {
+    background-color: #2b2b2b;
+}
+li#c5 {
+    background-color: #94A639;
+}
+li#c6 {
+    background-color: #3eb370;
+}
+li#c7 {
+    background-color: #00552e;
+}
+li#c8 {
+    background-color: #0095d9;
+}
+li#c9 {
+    background-color: #4c6cb3;
+}
+li#c10 {
+    background-color: #bce2e8;
+}
+li#c11 {
+    background-color: #949495;
+}
+li#c12 {
+    background-color: #ffffff;
+}
+li#c13 {
+    background-color: #f09199;
+}
+li#c14 {
+    background-color: #fce2c4;
+}
+li#c15 {
+    background-color: #ffd900;
+}
+li#c16 {
+    background-color: #f8b500;
+}
+li#c17 {
+    background-color: #ee7800;
+}
+li#c18 {
+    background-color: #eb6101;
+}
+li#c19 {
+    background-color: #e60033;
+}
+li#c20 {
+    background-color: #eb6ea5;
+}
+li#c21 {
+    background-color: #7058a3;
+}
+li#c22 {
+    background-color: #884898;
+}
+
+#canvasarea {
+    width: 500px;
+    padding-left: 20px;
+    display: inline-block;
+}
+
+canvas {
+    padding: 0;
+    touch-action: none;
+}
+
+li {
+    width: 20px;
+    height: 20px;
+}
+
+#illust { 
+    margin: 0;
+    display: inline-block;
+}
+
+.stars {
+    display: inline-block;
+    margin: 0;
+}
+
+#compbt_star {
+    text-align: center;
+}
+
+#comp {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    outline: none;
+    width: 150px;
+    height: 50px;
+    color: #ffffff;
+    border-left: 4px solid #fdbed7;
+    border-top: 4px solid #fdbed7;
+    border-right: 4px solid #8d1d4c;
+    border-bottom: 4px solid #8d1d4c;
+    background-color: #db4382;
+}
+
+#comp:active {
+    border-left: 4px solid #8d1d4c;
+    border-top: 4px solid #8d1d4c;
+    border-right: 4px solid #fdbed7;
+    border-bottom: 4px solid #fdbed7;
+}
+
+/* --------------テキストエリア------------------ */
+
+textarea {
+    width: 300px;
+    height: 100px;
+    display: block;
+    resize: none;
+    margin-left: auto;
+    margin-right: auto;
+    outline: none;
+    border: none;
+}
+
+/*------------------ カレンダー -------------------*/
+
+table {
+    table-layout: fixed;
+    width: 900px; /*％表示にすると、画像がはみ出る */
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    /* border: solid 2px; */
+}
+
+#cal_title p {
+    color: #dd1f94;
+    display: inline;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+tr #cal_title {
+    border: 0px none;
+    padding-left: 5px;
+    padding-bottom: 5px;
+}
+
+#l_arrow, #r_arrow {
+    width: 17px;
+    height: 17px;
+    display: inline;
+    border: none;
+    position: static;
+    padding: 0;
+}
+
+#l_arrow:active {
+    padding-right: 5px;
+}
+
+#r_arrow:active {
+    padding-left: 5px;
+}
+
+.days {
+    font-size: 20px;
+}
+
+td {
+    color: #fc75ad;
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    padding: 0;
+    width: 100px;
+    height: 130px;
+    /* border: solid 1px; */
+}
+
+td#cal_title {
+    background-color: #ffffff00;
+    padding: 0;
+    height: 30px;
+    font-size: 25px;
+}
+
+#cal_date {
+    left: 12px;
+    top: 5px;
+    margin: 0;
+    font-size: 30px;
+    position: absolute;
+}
+
+p#kyou {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #f7a0c4;
+}
+
+table img {
+    width: 90%;
+    margin: 0;
+    padding: 0;
+    border: 4px solid #fcbcdc;
+    left: 3px;
+    top: 50px;
+    position: absolute;
+}
+
+table img:hover {
+    border: 4px solid #ff0342;
+}
+
+table p {
+    padding: 0;
+    margin: 0;
+    color: #f7a0c4;
+}
+
+table a {
+    color: #f887b6;
+} 
