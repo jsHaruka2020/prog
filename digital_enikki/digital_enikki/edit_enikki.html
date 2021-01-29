@@ -223,7 +223,7 @@
         const lsdata_txt = localStorage.getItem("" + selectyear + ss_month + ss_date + "text");
         if(lsdata_img.length > 0 || lsdata_txt.length){
             $("html").empty();
-            $("html").html('<p>今日の日記はすでに作成済みです。</p><p><a href="enikki.html" id="cleardiary">今の日記を消して新しく作る</a></p><p><a href="all_enikki.html">絵日記一覧に戻る</a></p>');
+            $("html").html('<p>今日の日記はすでに作成済みです。</p><p><a href="edit_enikki.html" id="cleardiary">今の日記を消して新しく作る</a></p><p><a href="all_enikki.html">絵日記一覧に戻る</a></p>');
         }
 
         $("#cleardiary").on("click", function(){
